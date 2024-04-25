@@ -15,8 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('telephone');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('role', ['Student', 'Admin'])->default('Student');
+            $table->foreignId('langue_id')->default(1)->constrained();
             $table->rememberToken();
             $table->timestamps();
         });
