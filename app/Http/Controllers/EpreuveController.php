@@ -79,19 +79,19 @@ class EpreuveController extends Controller
                 "reason" => "Epreuve not found",
             ], 404);
         }
-        try{
+        // try{
             $ep = Epreuve::find($epreuve);
             return response()->json([
                 'success' => true,
                 'message' => "Epreuve found",
                 'data' => $ep
             ]);
-        }catch(Exception $e){
-            return response()->json([
-                'success' => false,
-                'reason' => 'Error: '.$e->getMessage()
-            ], 500);
-        }
+        // }catch(Exception $e){
+        //     return response()->json([
+        //         'success' => false,
+        //         'reason' => 'Error: '.$e->getMessage()
+        //     ], 500);
+        // }
     }
 
     /**
@@ -173,7 +173,7 @@ class EpreuveController extends Controller
                     'reason' => "Epreuve not found"
                 ], 404);
             }
-            $data = Epreuve::find($id)->questions();
+            $data = Epreuve::find($id)->_questions();
             return response()->json([
                 'success' => true,
                 'message' => "List of questions of this epreuve",
