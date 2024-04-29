@@ -30,16 +30,22 @@ Route::get('/login', function(){
         'reason' => "You're not authenticated",
     ], 401);
 })->name('login');
+Route::get('/admin_route', function(){
+    return response()->json([
+        'success' => false,
+        'reason' => "You're not admin",
+    ], 403);
+})->name('isAdminRoute');
 Route::post('user/connexion', [UserController::class, 'connexion']);
 Route::post('users', [UserController::class, 'store']);
-Route::middleware('auth:sanctum')->group(function(){    
+Route::middleware('auth:sanctum')->group(function(){
     Route::controller(UserController::class)->group(function(){
         Route::post('user/deconnexion', 'deconnexion');
-        Route::get('user/students', 'all_student');
-        Route::get('users', 'index');
+        Route::get('user/students', 'all_student')->middleware('isAdmin');
+        // Route::get('users', 'index');
         Route::get('users/{id}', 'show')->whereNumber('id');
         Route::put('users/{id}', 'update');
-        Route::delete('users/{id}', 'destroy');
+        Route::delete('users/{id}', 'destroy')->middleware('isAdmin');
     });
     Route::apiResource('langues', LangueController::class);
     Route::apiResource('matieres', MatiereController::class);
