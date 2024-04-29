@@ -49,7 +49,7 @@ class UserController extends Controller
      */
     public function all_student(){
         try{
-            $students = User::where('role', '=', 'Student')->get();
+            $students = User::where('role', '=', 'Student')->paginate(10);
             return response()->json([
                 "success" => true,
                 "data" => $students,

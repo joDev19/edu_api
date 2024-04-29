@@ -43,6 +43,7 @@ class MatiereController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required'],
+            'description' => [''],
         ]);
         if($validator->fails()){
             return response()->json([
