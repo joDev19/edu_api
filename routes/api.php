@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\EpreuveController;
 use App\Http\Controllers\LangueController;
 use App\Http\Controllers\MatiereController;
@@ -24,23 +25,30 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::get('/login', function(){
     return response()->json([
         'success' => false,
         'reason' => "You're not authenticated",
     ], 401);
 })->name('login');
+
 Route::get('/admin_route', function(){
     return response()->json([
         'success' => false,
         'reason' => "You're not admin",
     ], 403);
 })->name('isAdminRoute');
+
+
 Route::post('user/connexion', [UserController::class, 'connexion']);
+
 Route::post('users', [UserController::class, 'store']);
+
 Route::middleware('auth:sanctum')->group(function(){
     Route::controller(UserController::class)->group(function(){
         Route::post('user/deconnexion', 'deconnexion');
+
         Route::get('user/students', 'all_student')->middleware('isAdmin');
         // Route::get('users', 'index');
         Route::get('users/{id}', 'show')->whereNumber('id');
@@ -56,7 +64,14 @@ Route::middleware('auth:sanctum')->group(function(){
     //routes des questions
     Route::post('questions', [QuestionController::class, 'store']);
     Route::get('question/{id}/reponses', [QuestionController::class, 'reponses']);
-    ROute::post('reponses', [ReponseController::class, 'store']);
+    Route::post('reponses', [ReponseController::class, 'store']);
+
+    // routes des classes
+    Route::get('/classes', [ClasseController::class, 'index'])->middleware('isAdmin');
+    Route::post('/classes', [ClasseController::class, 'store'])->middleware('isAdmin');
+    Route::delete('/classes/{classe}', [ClasseController::class, 'destroy'])->middleware('isAdmin');
+    Route::get('/classes/{classe}', [ClasseController::class, 'show'])->middleware('isAdmin');
+    Route::put('/classes/{classe}', [ClasseController::class, 'update'])->middleware('isAdmin');
 
 });
 Route::post('user/recuperation_de_mot_de_passe', [UserController::class ,'recuperation_de_mot_de_passe']);

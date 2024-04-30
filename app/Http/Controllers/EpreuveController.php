@@ -60,7 +60,7 @@ class EpreuveController extends Controller
                 "success" => true,
                 "data" => $epreuve,
                 "message" => "epreuve created"
-            ]);
+            ], 200);
         }catch(Exception $e){
             return response()->json([
                 "success" => false,
@@ -86,7 +86,7 @@ class EpreuveController extends Controller
                 'success' => true,
                 'message' => "Epreuve found",
                 'data' => $ep
-            ]);
+            ], 200);
         // }catch(Exception $e){
         //     return response()->json([
         //         'success' => false,
