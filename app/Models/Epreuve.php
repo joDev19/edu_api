@@ -15,6 +15,7 @@ class Epreuve extends Model
         "matiere_id",
         "niveau_de_difficulte_id",
         "duree",
+        "classe_id",
     ];
 
     public function _questions(){
@@ -39,7 +40,13 @@ class Epreuve extends Model
             get: fn () => $this->belongsTo(Matiere::class, 'matiere_id')->first(),
         );
     }
+    protected function classe(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->belongsTo(Classe::class, 'classe_id')->first(),
+        );
+    }
 
-    protected $appends = ['questions', 'niveau', 'matiere'];
+    protected $appends = ['questions', 'niveau', 'matiere', 'classe'];
 
 }

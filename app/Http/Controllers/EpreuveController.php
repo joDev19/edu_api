@@ -44,6 +44,7 @@ class EpreuveController extends Controller
         $validator = Validator::make($request->all(), [
             'intitule' => ['required'],
             'niveau_de_difficulte_id' => ['required', 'exists:niveau_de_difficultes,id'],
+            'classe_id' => ['required', 'exists:classes,id'],
             'matiere_id' => ['required', 'exists:matieres,id'],
             'duree' => ['required'],
         ]);
