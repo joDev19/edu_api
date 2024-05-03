@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('intitule');
             $table->enum('type', ['choix_unique', 'choix_multiple']);
-            $table->foreignId('epreuve_id')->constrained();
+            $table->foreignId('epreuve_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

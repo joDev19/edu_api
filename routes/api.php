@@ -60,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource('niveaux', NiveauDeDifficulteController::class);
     Route::apiResource('epreuves', EpreuveController::class);
     Route::get('epreuve/{id}/questions', [EpreuveController::class, 'questions']);
+    Route::post('create_qcm', [EpreuveController::class, 'store_qcm']);
 
     //routes des questions
     Route::post('questions', [QuestionController::class, 'store']);

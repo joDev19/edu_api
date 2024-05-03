@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Epreuve;
+use App\Models\Question;
+use App\Models\Reponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Exception;
@@ -186,5 +188,67 @@ class EpreuveController extends Controller
                 'reason' => 'Error: '.$e->getMessage()
             ], 500);
         }
+    }
+    /**
+     * Store a qcm with his questions and his response
+    */
+    public function store_qcm(Request $request)
+    {
+        // validator
+        $validator = Validator::make($request->all(), [
+            'epreuve' => ['required','array:intitule,duree,niveau_de_difficulte_id,matiere_id,classe_id'],
+            'epreuve.*' => ['required'],
+            'epreuve.duree' => ['date_format:H:i'],
+            'epreuve.niveau_de_difficulte_id' => ['exists:niveau_de_difficultes,id'],
+            'epreuve.matiere_id' => ['exists:matieres,id'],
+            'epreuve.classe_id' => ['exists:classes,id'],
+            'questions' => ['required', 'array'],
+            //'questions.*'=> ['required', 'array:intitule,is_qcm,reponse'],
+            //'questions.*.*'=> ['required'],
+            'questions.*.is_qcm' => ['required','boolean'],
+            'questions.*.intitule' => ['required'],
+            //'questions.*.reponse' => ['array:intitule,is_true'],
+            //'questions.*.reponse.*' => ['required'],
+            //'questions.*.reponse.is_true' => ['boolean'],
+
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'success' => false,
+                'reason' => $validator->getMessageBag()->first()
+            ], 422);
+        }
+
+        //dd($request->epreuve, $request->questions);
+        // CREATE EPREUVE
+        $epreuve = Epreuve::create([
+            'intitule' => $request->epreuve['intitule'],
+            "duree" => $request->epreuve['duree'],
+            "niveau_de_difficulte_id" => $request->epreuve['niveau_de_difficulte_id'],
+            "matiere_id" => $request->epreuve['matiere_id'],
+            "classe_id" => $request->epreuve['classe_id'],
+        ]);
+        // question
+        foreach ($request->questions as $key => $question) {
+
+            $_question = Question::create([
+                'intitule' => $question['intitule'],
+                'type' => $question['is_qcm'] ? 'choix_multiple' : 'choix_unique',
+                'epreuve_id' => $epreuve->id,
+            ]);
+            foreach($question['reponse'] as $k => $reponse){
+                Reponse::create([
+                    'intitule' => $reponse['intitule'],
+                    'juste' => $reponse['is_true'],
+                    'question_id' => $_question->id
+                ]);
+            }
+
+        }
+        return response()->json([
+            'success' => true,
+            'message' => "qcm is created",
+            'data' => Epreuve::find($epreuve->id),
+        ]);
     }
 }
