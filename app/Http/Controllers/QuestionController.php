@@ -98,7 +98,7 @@ class QuestionController extends Controller
                     'reason' => "Question not found"
                 ], 404);
             }
-            $data = Question::find($id)->reponses();
+            $data = Question::find($id)->_reponses();
             return response()->json([
                 'success' => true,
                 'message' => "List of reponse of this question",
