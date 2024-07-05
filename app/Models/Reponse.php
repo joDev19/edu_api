@@ -13,4 +13,7 @@ class Reponse extends Model
         'juste',
         'question_id',
     ];
+    protected $casts = [
+        'juste' => 'boolean',
+    ];
 }

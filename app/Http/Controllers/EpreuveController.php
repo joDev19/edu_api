@@ -249,6 +249,45 @@ class EpreuveController extends Controller
             'success' => true,
             'message' => "qcm is created",
             'data' => Epreuve::find($epreuve->id),
-        ]);
+        ], 200);
     }
+    public function update_qcm(Request $request, $id){
+        if(!Epreuve::find($id)){
+            return response()->json([
+                'success' => false,
+                'reason' => "Epreuve not found"
+            ], 404);
+        }
+        // mise a jour de l'epreuve
+        $qcm = Epreuve::find($id);
+        $qcm->update([
+            'intitule' => '',
+            'share' => 1,
+            'niveau_de_difficulte_id' => '',
+            'matiere_id' => '',
+            'duree' => '',
+            'classe_id' => '',
+
+        ]);
+        // question .... deletetion (it will delete the response also)
+        dd($qcm->_questions()->delete());
+        // creation of question & reponses
+        foreach ($request->questions as $key => $question) {
+
+            $_question = Question::create([
+                'intitule' => $question['intitule'],
+                'type' => $question['is_qcm'] ? 'choix_multiple' : 'choix_unique',
+                'epreuve_id' => $epreuve->id,
+            ]);
+            foreach($question['reponses'] as $k => $reponse){
+                Reponse::create([
+                    'intitule' => $reponse['intitule'],
+                    'juste' => $reponse['is_true'],
+                    'question_id' => $_question->id
+                ]);
+            }
+
+        }
+    }
+
 }

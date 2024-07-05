@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    /**recuperer l'utilisateur grace a son token */
+    public function getAuthUser(){
+        return Auth::user();
+    }
     /**
      * Récupération de mot de passe
      */
@@ -99,10 +104,9 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required'],
             'email' => ['required', 'email'],
-            'telephone' => ['required'],
             'password' => ['required'],
             'role' => [''],
-            'langue_id' => [''],
+            'langue_index' => ['integer'],
         ]);
         if($validator->fails()){
             return response()->json([

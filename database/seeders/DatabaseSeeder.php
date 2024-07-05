@@ -21,6 +21,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             LangueSeeder::class,
             AdminSeeder::class,
+            MatiereSeeder::class,
+            ClasseSeeder::class,
+            NiveauDeDifficulteSeeder::class,
+            EpreuvePdfSeeder::class,
         ]);
     }
 }

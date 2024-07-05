@@ -19,10 +19,7 @@ class AdminSeeder extends Seeder
             'name' => 'Admin edu',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('admin'),
-            'telephone' => '00000000',
-            'langue_id' => Langue::where('name', 'Français')->first()->id,
             'role' => 'Admin'
-
         ]);
     }
 }
