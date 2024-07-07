@@ -24,11 +24,11 @@ class EpreuvePdfController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $query->orderBy('id', 'desc')->paginate(15), // Exécution de la requête finale
+                'data' => $query->orderBy('id', 'desc')->get(), // Exécution de la requête finale
                 'message' => 'Liste des pdfs',
             ], 200);
         }
-        $data = EpreuvePdf::orderBy('id', 'desc')->paginate(15);
+        $data = EpreuvePdf::orderBy('id', 'desc')->get();
         return response()->json([
             'success' => true,
             'data' => $data,

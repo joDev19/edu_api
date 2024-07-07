@@ -6,11 +6,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+        public function paiements(): BelongsToMany
+        {
+            return $this->belongsToMany(EpreuvePdf::class, 'epreuve_pdf_user_paiements', 'user_id', 'epreuve_pdf_id');
+        }
 
     /**
      * The attributes that are mass assignable.
